@@ -1,7 +1,6 @@
 import os
 import re
 import time
-from collections import defaultdict
 
 from slackclient import SlackClient
 
@@ -11,24 +10,24 @@ PLAYER = 'mpg123'
 BOTS_CHANNEL = 'general'
 TOKEN = ''
 CLIENT = SlackClient(TOKEN)
-SOUND_FILE = os.path.join(base_dir, 'sound.mp3')
-COMMAND = PLAYER + ' ' + SOUND_FILE
-MESSAGE_ON_PLAY = 'GIGA :puddi:'
+PUDDI_PUDDI = os.path.join(base_dir, 'sound.mp3')
+OH_MY = os.path.join(base_dir, 'ohmy.mp3')
 
 
-def has_attachments(event):
-    return 'attachments' in event
-
-
-def check_attachment(event):
+def check_github_message(event):
     regex = re.compile('.*Pull request closed.*')
     return any(regex.match(at['pretext']) for at in event['attachments'])
 
 
-MATCH = defaultdict(lambda: lambda _: False)
-MATCH['message'] = check_attachment
-CHECK_TYPES = defaultdict(lambda: lambda _: False)
-CHECK_TYPES['message'] = has_attachments
+def check_jira_message(event):
+    regex = re.compile('.* completed .*')
+    return regex.match(event['text'])
+
+
+CHECK_TYPES = [
+    (lambda x: x.get('username') == 'github', check_github_message, "GIGA :puddi:", PLAYER + ' ' + PUDDI_PUDDI),
+    (lambda x: x.get('username') == 'jira', check_jira_message, "You rock :+1:", PLAYER + ' ' + OH_MY)
+]
 
 
 def action(client, command, message):
@@ -42,9 +41,11 @@ def listen(client):
     if client.rtm_connect():
         while True:
             for event in CLIENT.rtm_read():
-                if event.get('type') and CHECK_TYPES[event['type']](event):
-                    if MATCH[event['type']](event):
-                        action(client, COMMAND, MESSAGE_ON_PLAY)
+                print(event)
+                for check_type, match_regex, message, command in CHECK_TYPES:
+                    if event.get('type') and check_type(event):
+                        if match_regex(event):
+                            action(client, command, message)
             time.sleep(1)
     else:
         print('Connection failed, invalid token?')

@@ -1,7 +1,7 @@
 Simple sound bot
 ================
 
-Simple bot that plays a sound on pull request closed
+Simple bot that plays a sound on specific integration bots message
 
 Inspired by [Casey Fulton's blog post](www.caseyfulton.com/audiosound-emojis-in-slack/).
 
@@ -21,4 +21,4 @@ Run the bot:
 
     $ python sounds.py
 
-Add support for other types of messages by changing `MATCH` and `CHECK_TYPES`
+Add support for other types of messages by adding a rule in `CHECK_TYPES`
