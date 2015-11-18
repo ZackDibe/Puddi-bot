@@ -10,7 +10,7 @@ PLAYER = 'mpg123'
 BOTS_CHANNEL = 'general'
 TOKEN = ''
 CLIENT = SlackClient(TOKEN)
-PUDDI_PUDDI = os.path.join(base_dir, 'sound.mp3')
+PUDDI_PUDDI = os.path.join(base_dir, 'puddipuddi.mp3')
 OH_MY = os.path.join(base_dir, 'ohmy.mp3')
 
 
