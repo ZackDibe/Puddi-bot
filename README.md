@@ -3,7 +3,7 @@ Simple sound bot
 
 Simple bot that plays a sound on specific integration bots message
 
-Inspired by [Casey Fulton's blog post](www.caseyfulton.com/audiosound-emojis-in-slack/).
+Inspired by [Casey Fulton's blog post](http://www.caseyfulton.com/audiosound-emojis-in-slack/).
 
 Installation
 ----------
